@@ -1,1 +1,69 @@
+json
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+// Define a struct to hold market data
+struct MarketData {
+    double open;
+    double high;
+    double low;
+    double close;
+    double volume;
+};
+
+// Define a function to calculate the moving average
+double calculateMovingAverage(const std::vector<MarketData>& marketData, int period) {
+    double sum = 0.0;
+    for (int i = marketData.size() - period; i < marketData.size(); ++i) {
+        sum += marketData[i].close;
+    }
+    return sum / period;
+}
+
+// Define a function to execute a trade
+void executeTrade(const std::string& symbol, double amount, double stopLoss, double takeProfit) {
+    // Simulate a trade execution
+    std::cout << "Executing trade for " << symbol << " with amount " << amount << ", stop loss " << stopLoss << ", and take profit " << takeProfit << std::endl;
+}
+
+int main() {
+    // Define market data
+    std::vector<MarketData> marketData = {
+        {10.0, 12.0, 9.0, 11.0, 100.0},
+        {11.0, 13.0, 10.0, 12.0, 120.0},
+        {12.0, 14.0, 11.0, 13.0, 140.0},
+        // ...
+    };
+
+    // Define moving average periods
+    int shortPeriod = 10;
+    int longPeriod = 20;
+
+    // Calculate moving averages
+    double shortMA = calculateMovingAverage(marketData, shortPeriod);
+    double longMA = calculateMovingAverage(marketData, longPeriod);
+
+    // Define risk management parameters
+    double stopLossPercentage = 0.05;
+    double takeProfitPercentage = 0.10;
+    double positionSize = 1000.0;
+
+    // Execute trades based on moving average strategy
+    if (shortMA > longMA) {
+        // Buy signal
+        double stopLoss = marketData.back().close * (1.0 - stopLossPercentage);
+        double takeProfit = marketData.back().close * (1.0 + takeProfitPercentage);
+        executeTrade("Deriv", positionSize, stopLoss, takeProfit);
+    } else if (shortMA < longMA) {
+        // Sell signal
+        double stopLoss = marketData.back().close * (1.0 + stopLossPercentage);
+        double takeProfit = marketData.back().close * (1.0 - takeProfitPercentage);
+        executeTrade("Deriv", positionSize, stopLoss, takeProfit);
+    }
+
+    return 0;
+}
